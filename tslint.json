@@ -3,8 +3,9 @@
     "extends": [
         "tslint:recommended"
     ],
-    "jsRules": {},
     "rules": {
+        "arrow-parens": false,
+        "interface-name": false,
         "no-empty": false,
         "no-implicit-dependencies": false,
         "no-submodule-imports": false,
@@ -12,6 +13,5 @@
         "quotemark": false,
         "trailing-comma": false,
         "variable-name": false
-    },
-    "rulesDirectory": []
+    }
 }

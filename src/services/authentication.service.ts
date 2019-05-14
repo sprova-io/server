@@ -43,6 +43,47 @@ class AuthenticationService {
     }
 
     /**
+     * Sign up for access to sprova
+     *
+     * @param username
+     * @param password
+     */
+    public async signUp(user: IUser): Promise<IValidationResponse> {
+
+        if (!user.username) {
+            return { ok: 0, message: 'Username cannot be empty' };
+        }
+        if (!user.password) {
+            return { ok: 0, message: 'Password cannot be empty' };
+        }
+        if (!user.email) {
+            return { ok: 0, message: 'E-mail cannot be empty' };
+        }
+
+        const userExists = await this.Users.findOne({ username: user.username });
+        const emailExists = await this.Users.findOne({ usemailername: user.email });
+
+        if (userExists) {
+            return { ok: 0, message: 'Username already taken' };
+        } else if (emailExists) {
+            return { ok: 0, message: 'E-mail already taken' };
+        } else {
+            const newUser: IUser = {
+                username: user.username,
+                password: user.password,
+                email: user.email,
+                firstname: user.firstname,
+                lastname: user.lastname,
+                status: 'SIGNUP',
+                role: 'SIGNUP'
+            };
+            const newUserInsertResponse = await this.Users.insertOne(newUser);
+        }
+
+        return { ok: 1, content: user, message: 'Successfully signed up. Waiting for Response.' };
+    }
+
+    /**
      * Build JWT token to use for API authentication
      *
      * @param user user model containing user details

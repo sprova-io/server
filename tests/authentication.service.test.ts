@@ -1,13 +1,14 @@
 const config = { db: { host: '127.0.0.1', port: 0, name: '' } };
-import { adminUser } from './fixtures/authentication.fixture';
+import { adminUser, signUpUser } from './fixtures/authentication.fixture';
 
 // mocks
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import dbm from '../src/utils/db';
 
+import { IUser } from '@/models';
 import authenticationService from "../src/services/authentication.service";
 
-describe('Validation', () => {
+describe('Authentication', () => {
     let mongod: MongoMemoryServer;
     let Users: any;
     beforeAll(async () => {
@@ -25,37 +26,59 @@ describe('Validation', () => {
             throw new Error(e);
         }
     });
+    describe('Validation', () => {
+        afterEach(async () => {
+            await Users.deleteMany();
+        });
+        test('should validate admin', async () => {
+            await Users.insertOne(adminUser);
+            const result = await authenticationService.validate('admin', 'admin');
+            expect(result).not.toBe(undefined);
+            expect(result.ok).toBe(1);
+            expect(result.message).toBe('Successfully authenticated');
+        });
 
-    test('should validate admin', async () => {
-        await Users.insertOne(adminUser);
-        const result = await authenticationService.validate('admin', 'admin');
-        expect(result).not.toBe(undefined);
-        expect(result.ok).toBe(1);
-        expect(result.message).toBe('Successfully authenticated');
+        test('should not validate empty username', async () => {
+            const result = await authenticationService.validate('', 'admin');
+            expect(result).not.toBe(undefined);
+            expect(result.ok).toBe(0);
+            expect(result.message).toBe('Username cannot be empty');
+        });
+
+        test('should not validate wrong username', async () => {
+            const result = await authenticationService.validate('notadmin', 'admin');
+            expect(result).not.toBe(undefined);
+            expect(result.ok).toBe(0);
+            expect(result.message).toBe('Username not found');
+        });
+
+        test('should not validate empty password', async () => {
+            const result = await authenticationService.validate('admin', '');
+            expect(result).not.toBe(undefined);
+            expect(result.ok).toBe(0);
+            expect(result.message).toBe('Password cannot be empty');
+        });
+
     });
-
-    test('should not validate empty username', async () => {
-        const result = await authenticationService.validate('', 'admin');
-        expect(result).not.toBe(undefined);
-        expect(result.ok).toBe(0);
-        expect(result.message).toBe('Username cannot be empty');
-    });
-
-    test('should not validate empty username', async () => {
-        const result = await authenticationService.validate('notadmin', 'admin');
-        expect(result).not.toBe(undefined);
-        expect(result.ok).toBe(0);
-        expect(result.message).toBe('Username not found');
-    });
-
-    test('should not validate empty username', async () => {
-        const result = await authenticationService.validate('admin', '');
-        expect(result).not.toBe(undefined);
-        expect(result.ok).toBe(0);
-        expect(result.message).toBe('Password cannot be empty');
+    describe('Sign-Up', () => {
+        test('should not sign up with empty username', async () => {
+            delete signUpUser.username;
+            const result = await authenticationService.signUp(signUpUser);
+            expect(result).not.toBe(undefined);
+            expect(result.ok).toBe(0);
+            expect(result.message).toBe('Username cannot be empty');
+        });
+        test('should not sign up empty password', async () => {
+            signUpUser.username = 'bob';
+            delete signUpUser.password;
+            const result = await authenticationService.signUp(signUpUser);
+            expect(result).not.toBe(undefined);
+            expect(result.ok).toBe(0);
+            expect(result.message).toBe('Password cannot be empty');
+        });
     });
 
     afterAll(async () => {
         mongod.stop();
-      });
+    });
 });

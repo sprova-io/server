@@ -1,7 +1,7 @@
 
 # Sprova Server 
 
-[![Build Status](https://travis-ci.org/aldialimucaj/sprova-server.svg?branch=master)](https://travis-ci.org/aldialimucaj/sprova-server)
+[![Build Status](https://travis-ci.org/sprova-io/server.svg?branch=master)](https://travis-ci.org/sprova-io/server)
 
 
 ## API documentation

@@ -2,6 +2,7 @@
 # Sprova Server 
 
 [![Build Status](https://travis-ci.org/sprova-io/server.svg?branch=master)](https://travis-ci.org/sprova-io/server)
+[![codecov](https://codecov.io/gh/sprova-io/server/branch/master/graph/badge.svg)](https://codecov.io/gh/sprova-io/server)
 
 
 ## API documentation

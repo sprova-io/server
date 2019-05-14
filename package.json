@@ -23,6 +23,7 @@
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.2.4",
     "multer": "^1.4.1",
+    "sprova-types": "^1.0.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {

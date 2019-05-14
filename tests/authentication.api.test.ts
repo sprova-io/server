@@ -8,7 +8,6 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import dbm from '../src/utils/db';
 const config = { db: { host: '127.0.0.1', port: 0, name: '' } };
 
-import * as bodyParser from 'body-parser';
 import authentication from '../src/api/authentication.api';
 import authenticationService from "../src/services/authentication.service";
 
@@ -32,8 +31,8 @@ describe('Authentication API Route', () => {
         }
 
         app = express();
-        app.use(bodyParser.json());
-        app.use(bodyParser.urlencoded({ extended: true }));
+        app.use(express.json());
+        app.use(express.urlencoded({ extended: true }));
         app.use(authentication);
     });
     describe('authenticate() function', () => {

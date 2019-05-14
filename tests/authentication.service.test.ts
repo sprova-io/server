@@ -54,4 +54,8 @@ describe('Validation', () => {
         expect(result.ok).toBe(0);
         expect(result.message).toBe('Password cannot be empty');
     });
+
+    afterAll(async () => {
+        mongod.stop();
+      });
 });

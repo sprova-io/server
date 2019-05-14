@@ -66,4 +66,8 @@ describe('Authentication API Route', () => {
             expect(result.status).toBe(401);
         });
     });
+
+    afterAll(async () => {
+        mongod.stop();
+    });
 });

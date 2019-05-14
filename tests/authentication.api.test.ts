@@ -8,13 +8,13 @@ import { MongoMemoryServer } from 'mongodb-memory-server';
 import dbm from '../src/utils/db';
 const config = { db: { host: '127.0.0.1', port: 0, name: '' } };
 
+import * as bodyParser from 'body-parser';
 import authentication from '../src/api/authentication.api';
 import authenticationService from "../src/services/authentication.service";
-import * as bodyParser from 'body-parser';
 
 describe('Authentication API Route', () => {
     let app: Application;
-    let mongod;
+    let mongod: MongoMemoryServer;
     let Users: any;
     beforeAll(async () => {
         try {

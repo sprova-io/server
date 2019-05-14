@@ -8,7 +8,7 @@ import dbm from '../src/utils/db';
 import authenticationService from "../src/services/authentication.service";
 
 describe('Validation', () => {
-    let mongod;
+    let mongod: MongoMemoryServer;
     let Users: any;
     beforeAll(async () => {
         try {

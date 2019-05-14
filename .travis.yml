@@ -16,6 +16,7 @@ before_script:
 
 script:
   - npm test
+  - npm run publish-coverage
   - npm run lint
 
 after_success:

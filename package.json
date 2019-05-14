@@ -5,6 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "tsc && jest",
+    "publish-coverage": "./node_modules/.bin/codecov --token=\"$CODECOV_TOKEN\"",
     "tsc": "tsc",
     "lint-fix": "tslint -c tslint.json -p tsconfig.json --fix",
     "lint": "tslint -c tslint.json -p tsconfig.json",

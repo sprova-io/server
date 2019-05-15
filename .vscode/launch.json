@@ -5,6 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Launch server.js via nodemon",
+            "type": "node",
+            "request": "launch",
+            "runtimeArgs": [
+                "--inspect",
+            ],
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/nodemon",
+            "restart": true,
+            "console": "integratedTerminal",
+            "protocol": "inspector",
+            "internalConsoleOptions": "neverOpen",
+            "autoAttachChildProcesses": true
+        },
+        {
             "name": "Debug Tests",
             "type": "node",
             "request": "launch",
@@ -27,7 +41,7 @@
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${workspaceFolder}/src/index.ts",
+            "program": "${workspaceFolder}/src/server.ts",
             "preLaunchTask": "tsc: build - tsconfig.json",
             "env": {
                 "NODE_ENV": "development"

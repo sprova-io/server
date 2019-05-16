@@ -1,11 +1,12 @@
-import { MongoClient } from 'mongodb';
+import { Db, MongoClient, MongoClientOptions } from 'mongodb';
 import * as config from '../config';
 import log from './logger';
 
 class DatabaseManager {
-    public config: any;
-    public client: any;
-    public db: any;
+    private db: Db | any;
+    private client: MongoClient | any;
+    private config: any;
+    private retryInterval = 3; // seconds
 
     constructor(configuration: any) {
         log.info('Initializing DB');
@@ -18,7 +19,7 @@ class DatabaseManager {
         return `mongodb://${host}:${port}/${name}`;
     }
 
-    get mongoOptions() {
+    get mongoOptions(): MongoClientOptions {
         const { mongoOptions } = this.config;
         const { SPROVA_DB_USERNAME, SPROVA_DB_PASSWORD } = process.env;
 
@@ -41,14 +42,19 @@ class DatabaseManager {
         }
         log.info('Connecting to database ' + this.connectUrl);
         const { name } = this.config.db;
-        try {
-            this.client = await MongoClient.connect(this.connectUrl, this.mongoOptions);
-            this.db = this.client.db(name);
-            log.info('Successfully connected to database ' + this.connectUrl);
-        } catch (error) {
-            log.error('%s at %s', error.message, this.connectUrl);
-            throw error;
-        }
+        do {
+            try {
+                if (this.client && this.client.isConnected()) {
+                    this.client.close();
+                }
+                this.client = await MongoClient.connect(this.connectUrl, this.mongoOptions);
+                this.db = this.client.db(name);
+                log.info('Successfully connected to database ' + this.connectUrl);
+            } catch (error) {
+                log.error(error.message + ', retrying in ' + this.retryInterval + ' seconds');
+                await new Promise(resolve => setTimeout(resolve, this.retryInterval * 1000));
+            }
+        } while (!this.client);
     }
 
     /**

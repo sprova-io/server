@@ -1,3 +1,4 @@
+import * as expressWinston from "express-winston";
 import winston from "winston";
 
 const logger = winston.createLogger({
@@ -16,4 +17,13 @@ if (process.env.NODE_ENV === 'production') {
 } else {
     logger.add(new winston.transports.Console({ format: winston.format.simple() }));
 }
+
+const expressLoggerMessage =
+    "HTTP {{res.statusCode}} {{req.method}} '{{req.url}}' ({{res.responseTime}}ms)";
+
+export const expressLogger = expressWinston.logger({
+    winstonInstance: logger,
+    msg: expressLoggerMessage
+});
+
 export default logger;

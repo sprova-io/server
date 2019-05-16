@@ -1,7 +1,7 @@
 {
   "name": "sprova-server",
   "version": "0.1.0",
-  "description": "",
+  "description": "Sprova Test Framework Server",
   "main": "src/server.ts",
   "scripts": {
     "test": "tsc && jest",
@@ -12,8 +12,8 @@
     "dev": "nodemon",
     "prod": "tsc && ./node_modules/.bin/gulp copy-config && node ./build/src/server.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Aldi Alimucaj",
+  "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^8.0.0",

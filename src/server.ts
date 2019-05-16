@@ -3,9 +3,8 @@ import express, { Application } from 'express';
 import jwt from "express-jwt";
 import path from 'path';
 
-import { expressLogger, logger } from "./core/logger";
 import { unauthorized } from './utils/http';
-import log from './utils/logger';
+import log, { expressLogger } from './utils/logger';
 
 import authentication from "./api/authentication.api";
 import status from "./api/status.api";

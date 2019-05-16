@@ -50,3 +50,5 @@ app.use(express.static(path.join(__dirname, "public")));
 app.listen(PORT, () => {
   log.info(`Example app listening on port ${PORT}`);
 });
+
+export default app;

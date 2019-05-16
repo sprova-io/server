@@ -1,12 +1,12 @@
 const config = { db: { host: '127.0.0.1', port: 0, name: '' } };
-import { adminUser, signUpUser } from './fixtures/authentication.fixture';
+import { adminUser, signUpUser } from '../fixtures/authentication.fixture';
 
 // mocks
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import dbm from '../src/utils/db';
+import dbm from '../../src/utils/db';
 
 import { IUser } from '@/models';
-import authenticationService from "../src/services/authentication.service";
+import authenticationService from "../../src/services/authentication.service";
 
 describe('Authentication', () => {
     let mongod: MongoMemoryServer;

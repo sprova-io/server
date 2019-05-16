@@ -1,4 +1,4 @@
-import { status } from '../src/services/status.service';
+import { status } from '../../src/services/status.service';
 
 test('status() Should return serverstatus', () => {
     const result = status();

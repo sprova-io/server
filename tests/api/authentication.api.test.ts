@@ -1,15 +1,15 @@
 import express, { Application } from 'express';
 import request from "supertest";
 
-import { adminUser } from './fixtures/authentication.fixture';
+import { adminUser } from '../fixtures/authentication.fixture';
 
 // mocks
 import { MongoMemoryServer } from 'mongodb-memory-server';
-import dbm from '../src/utils/db';
+import dbm from '../../src/utils/db';
 const config = { db: { host: '127.0.0.1', port: 0, name: '' } };
 
-import authentication from '../src/api/authentication.api';
-import authenticationService from "../src/services/authentication.service";
+import authentication from '../../src/api/authentication.api';
+import authenticationService from "../../src/services/authentication.service";
 
 describe('Authentication API Route', () => {
     let app: Application;

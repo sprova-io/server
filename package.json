@@ -10,7 +10,7 @@
     "lint-fix": "tslint -c tslint.json -p tsconfig.json --fix",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "dev": "nodemon",
-    "prod": "tsc && node ./build/server.js"
+    "prod": "tsc && ./node_modules/.bin/gulp copy-config && node ./build/src/server.js"
   },
   "author": "",
   "license": "ISC",
@@ -41,6 +41,7 @@
     "@types/supertest": "^2.0.7",
     "@types/winston": "^2.4.4",
     "codecov": "^3.4.0",
+    "gulp": "^4.0.2",
     "jest": "^24.8.0",
     "mongodb-memory-server": "^5.1.1",
     "nodemon": "^1.19.0",

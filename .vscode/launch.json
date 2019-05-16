@@ -5,42 +5,28 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch server.js via nodemon",
-            "type": "node",
-            "request": "launch",
-            "runtimeArgs": [
-                "--inspect",
-            ],
-            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/nodemon",
-            "restart": true,
-            "console": "integratedTerminal",
-            "protocol": "inspector",
-            "internalConsoleOptions": "neverOpen",
-            "autoAttachChildProcesses": true
-        },
-        {
-            "name": "Debug Tests",
-            "type": "node",
-            "request": "launch",
-            "runtimeArgs": [
-                "--inspect-brk",
-                "${workspaceRoot}/node_modules/.bin/jest",
-                "--runInBand",
-                "--detectOpenHandles"
-            ],
-            "preLaunchTask": "tsc: build - tsconfig.json",
-            "console": "integratedTerminal",
-            "internalConsoleOptions": "neverOpen",
-            "disableOptimisticBPs": true,
-            "port": 9229,
-            "outFiles": [
-                "${workspaceFolder}/**/*.js"
-            ]
-        },
-        {
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
+            "args": [
+                "-r",
+                "tsconfig-paths/register",
+                "${workspaceFolder}/src/server.ts"
+            ],
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register"
+            ],
+            "env": {
+                "NODE_ENV": "development",
+                "S_NODE_PROJECT": "tsconfig.json"
+            },
+            "console": "integratedTerminal",
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "TSC Launch Program",
             "program": "${workspaceFolder}/src/server.ts",
             "preLaunchTask": "tsc: build - tsconfig.json",
             "env": {

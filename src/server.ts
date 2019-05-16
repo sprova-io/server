@@ -3,7 +3,7 @@ import express, { Application } from 'express';
 import jwt from "express-jwt";
 import path from 'path';
 
-import { expressLogger, logger } from "@/core/logger";
+import { expressLogger, logger } from "./core/logger";
 import { unauthorized } from './utils/http';
 import log from './utils/logger';
 

@@ -1,7 +1,6 @@
 import express, { Application } from 'express';
 import request from "supertest";
 
-
 import server, { close } from '../src/server';
 import dbm from '../src/utils/db';
 

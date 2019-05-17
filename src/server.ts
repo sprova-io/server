@@ -1,6 +1,7 @@
 import cors from 'cors';
 import express, { Application } from 'express';
 import jwt from "express-jwt";
+import { Server } from 'http';
 import path from 'path';
 
 import { unauthorized } from './utils/http';
@@ -46,8 +47,13 @@ app.use(express.static(path.join(__dirname, "public")));
   }
 })();
 
-app.listen(PORT, () => {
+const server: Server = app.listen(PORT, () => {
   log.info(`Example app listening on port ${PORT}`);
 });
+
+export const close = async () => {
+  server.close();
+  await dbm.disconnect();
+};
 
 export default app;

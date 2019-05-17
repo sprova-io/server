@@ -63,6 +63,8 @@ class DatabaseManager {
     public async disconnect() {
         if (this.client && this.client.isConnected()) {
             await this.client.close();
+        } else {
+            log.warn('Attempting to close a DB connection which does not exist.');
         }
     }
 

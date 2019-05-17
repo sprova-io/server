@@ -2,7 +2,7 @@ import express, { Application } from 'express';
 import request from "supertest";
 
 
-import server from '../src/server';
+import server, { close } from '../src/server';
 import dbm from '../src/utils/db';
 
 describe('server.ts', () => {
@@ -21,6 +21,6 @@ describe('server.ts', () => {
         });
     });
     afterAll(async () => {
-        dbm.disconnect();
+        close();
     });
 });

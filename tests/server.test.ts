@@ -1,7 +1,9 @@
 import express, { Application } from 'express';
 import request from "supertest";
 
+
 import server from '../src/server';
+import dbm from '../src/utils/db';
 
 describe('server.ts', () => {
     let app: Application;
@@ -17,5 +19,8 @@ describe('server.ts', () => {
             expect(result.body.running).toBe(true);
             expect(result.status).toBe(200);
         });
+    });
+    afterAll(async () => {
+        dbm.disconnect();
     });
 });

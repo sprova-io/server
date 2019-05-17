@@ -61,7 +61,9 @@ class DatabaseManager {
      * Disconnect client from database.
      */
     public async disconnect() {
-        await this.client.close();
+        if (this.client && this.client.isConnected()) {
+            await this.client.close();
+        }
     }
 
     /**

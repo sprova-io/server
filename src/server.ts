@@ -34,19 +34,24 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Authorized Routes
 
-// Start Server
+// Some services due to lack of asynchronity in constructor
+// need to be loaded after DB connection has been setup
+export const loadServices = async () => {
+  await authenticationService.load();
+};
 
 (async function start() {
   log.info('Server connecting to database');
   try {
     await dbm.connect();
-    await authenticationService.load();
+    await loadServices();
     log.info('Successfully established database connection');
   } catch (e) {
     log.error(e);
   }
 })();
 
+// Start Server
 const server: Server = app.listen(PORT, () => {
   log.info(`Example app listening on port ${PORT}`);
 });

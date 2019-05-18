@@ -11,10 +11,11 @@ class DatabaseManager {
     private retryInterval = 3; // seconds
     private retryTimes = DEFAULT_RETRY_TIMES;
 
-
     constructor(configuration: any) {
         log.info('Initializing DB');
         this.config = configuration;
+        this.retryTimes = configuration.retryTimes;
+        this.retryInterval = configuration.retryInterval;
     }
 
     // TODO: handle replicaSets and shards
@@ -41,9 +42,10 @@ class DatabaseManager {
      * @param {*} configuration Optional config override that can by used for testing.
      */
     public async connect(configuration?: any) {
-        this.retryTimes = DEFAULT_RETRY_TIMES;
         if (configuration) {
             this.config = configuration;
+            this.retryTimes = configuration.retryTimes;
+            this.retryInterval = configuration.retryInterval;
         }
 
         log.info('Connecting to database ' + this.connectUrl);

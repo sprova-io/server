@@ -2,11 +2,15 @@ import { Db, MongoClient, MongoClientOptions } from 'mongodb';
 import * as config from '../config';
 import log from './logger';
 
+const DEFAULT_RETRY_TIMES = 5;
+
 class DatabaseManager {
     private db: Db | any;
     private client: MongoClient | any;
     private config: any;
     private retryInterval = 3; // seconds
+    private retryTimes = DEFAULT_RETRY_TIMES;
+
 
     constructor(configuration: any) {
         log.info('Initializing DB');
@@ -37,9 +41,11 @@ class DatabaseManager {
      * @param {*} configuration Optional config override that can by used for testing.
      */
     public async connect(configuration?: any) {
+        this.retryTimes = DEFAULT_RETRY_TIMES;
         if (configuration) {
             this.config = configuration;
         }
+
         log.info('Connecting to database ' + this.connectUrl);
         const { name } = this.config.db;
         do {
@@ -54,7 +60,7 @@ class DatabaseManager {
                 log.error(error.message + ', retrying in ' + this.retryInterval + ' seconds');
                 await new Promise(resolve => setTimeout(resolve, this.retryInterval * 1000));
             }
-        } while (!this.client);
+        } while (!this.client && --this.retryTimes > 0);
     }
 
     /**

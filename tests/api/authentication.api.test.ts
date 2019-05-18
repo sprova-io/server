@@ -18,6 +18,7 @@ describe('Authentication API Route', () => {
     beforeAll(async () => {
         try {
             mongod = new MongoMemoryServer();
+            const uri = await mongod.getConnectionString();
             config.db.port = await mongod.getPort();
             config.db.name = await mongod.getDbName();
 

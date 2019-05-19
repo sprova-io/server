@@ -35,28 +35,28 @@ describe('Authentication', () => {
             await Users.insertOne(adminUser);
             const result = await authenticationService.validate('admin', 'admin');
             expect(result).not.toBe(undefined);
-            expect(result.ok).toBe(1);
+            expect(result.ok).toBe(true);
             expect(result.message).toBe('Successfully authenticated');
         });
 
         test('should not validate empty username', async () => {
             const result = await authenticationService.validate('', 'admin');
             expect(result).not.toBe(undefined);
-            expect(result.ok).toBe(0);
+            expect(result.ok).toBe(false);
             expect(result.message).toBe('Username cannot be empty');
         });
 
         test('should not validate wrong username', async () => {
             const result = await authenticationService.validate('notadmin', 'admin');
             expect(result).not.toBe(undefined);
-            expect(result.ok).toBe(0);
+            expect(result.ok).toBe(false);
             expect(result.message).toBe('Username not found');
         });
 
         test('should not validate empty password', async () => {
             const result = await authenticationService.validate('admin', '');
             expect(result).not.toBe(undefined);
-            expect(result.ok).toBe(0);
+            expect(result.ok).toBe(false);
             expect(result.message).toBe('Password cannot be empty');
         });
 
@@ -66,7 +66,7 @@ describe('Authentication', () => {
             delete signUpUser.username;
             const result = await authenticationService.signUp(signUpUser);
             expect(result).not.toBe(undefined);
-            expect(result.ok).toBe(0);
+            expect(result.ok).toBe(false);
             expect(result.message).toBe('Username cannot be empty');
         });
         test('should not sign up empty password', async () => {
@@ -74,7 +74,7 @@ describe('Authentication', () => {
             delete signUpUser.password;
             const result = await authenticationService.signUp(signUpUser);
             expect(result).not.toBe(undefined);
-            expect(result.ok).toBe(0);
+            expect(result.ok).toBe(false);
             expect(result.message).toBe('Password cannot be empty');
         });
     });

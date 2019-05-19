@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
+import { IResponseMessage } from '@/utils/responses';
 import { IUser } from "../models";
 import dbm from '../utils/db';
 import log from '../utils/logger';
@@ -24,22 +25,22 @@ class AuthenticationService {
     public async validate(username: string, password: string): Promise<IValidationResponse> {
 
         if (!username) {
-            return { ok: 0, message: 'Username cannot be empty' };
+            return { ok: false, message: 'Username cannot be empty' };
         }
         if (!password) {
-            return { ok: 0, message: 'Password cannot be empty' };
+            return { ok: false, message: 'Password cannot be empty' };
         }
 
         const user = await this.Users.findOne({ username });
         if (!user) {
-            return { ok: 0, message: 'Username not found' };
+            return { ok: false, message: 'Username not found' };
         } else if (user.password !== sha512(password, JWT_SECRET)) {
-            return { ok: 0, message: 'Incorrect password' };
+            return { ok: false, message: 'Incorrect password' };
         } else {
             delete user.password;
         }
 
-        return { ok: 1, content: user, message: 'Successfully authenticated' };
+        return { ok: true, content: user, message: 'Successfully authenticated' };
     }
 
     /**
@@ -51,22 +52,22 @@ class AuthenticationService {
     public async signUp(user: IUser): Promise<IValidationResponse> {
 
         if (!user.username) {
-            return { ok: 0, message: 'Username cannot be empty' };
+            return { ok: false, message: 'Username cannot be empty' };
         }
         if (!user.password) {
-            return { ok: 0, message: 'Password cannot be empty' };
+            return { ok: false, message: 'Password cannot be empty' };
         }
         if (!user.email) {
-            return { ok: 0, message: 'E-mail cannot be empty' };
+            return { ok: false, message: 'E-mail cannot be empty' };
         }
 
         const userExists = await this.Users.findOne({ username: user.username });
         const emailExists = await this.Users.findOne({ usemailername: user.email });
 
         if (userExists) {
-            return { ok: 0, message: 'Username already taken' };
+            return { ok: false, message: 'Username already taken' };
         } else if (emailExists) {
-            return { ok: 0, message: 'E-mail already taken' };
+            return { ok: false, message: 'E-mail already taken' };
         } else {
             const newUser: IUser = {
                 username: user.username,
@@ -80,7 +81,7 @@ class AuthenticationService {
             const newUserInsertResponse = await this.Users.insertOne(newUser);
         }
 
-        return { ok: 1, content: user, message: 'Successfully signed up. Waiting for Response.' };
+        return { ok: true, content: user, message: 'Successfully signed up. Waiting for Response.' };
     }
 
     /**
@@ -124,10 +125,8 @@ export const sha512 = (password: string, key = JWT_SECRET) => {
     return hash.digest('hex');
 };
 
-export interface IValidationResponse {
-    ok: number;
+export interface IValidationResponse extends IResponseMessage {
     content?: IUser;
-    message: string;
 }
 
 export default new AuthenticationService();

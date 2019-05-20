@@ -65,7 +65,9 @@ describe('server.ts', () => {
         });
     });
 
-    afterAll(async () => {
+    afterAll(async done => {
+        mongod.stop();
         close();
+        done();
     });
 });

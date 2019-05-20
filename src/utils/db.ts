@@ -1,26 +1,28 @@
-import { Db, MongoClient, MongoClientOptions } from 'mongodb';
 import * as config from '../config';
+
+import { Db, MongoClient, MongoClientOptions } from 'mongodb';
 import log from './logger';
 
 const DEFAULT_RETRY_TIMES = 5;
+const DEFAULT_RETRY_INTERVAL_SECONDS = 3;
 
 class DatabaseManager {
     private db: Db | any;
     private client: MongoClient | any;
     private config: any;
-    private retryInterval = 3; // seconds
+    private retryInterval = DEFAULT_RETRY_INTERVAL_SECONDS;
     private retryTimes = DEFAULT_RETRY_TIMES;
 
     constructor(configuration: any) {
         log.info('Initializing DB');
         this.config = configuration;
-        this.retryTimes = configuration.retryTimes;
-        this.retryInterval = configuration.retryInterval;
+        this.retryTimes = configuration.retryTimes || DEFAULT_RETRY_TIMES;
+        this.retryInterval = configuration.retryInterval || DEFAULT_RETRY_INTERVAL_SECONDS;
     }
 
     // TODO: handle replicaSets and shards
     get connectUrl() {
-        const { host, port, name } = this.config.db;
+        const { host, port, name } = this.config;
         return `mongodb://${host}:${port}/${name}`;
     }
 
@@ -44,12 +46,12 @@ class DatabaseManager {
     public async connect(configuration?: any) {
         if (configuration) {
             this.config = configuration;
-            this.retryTimes = configuration.retryTimes;
-            this.retryInterval = configuration.retryInterval;
+            this.retryTimes = configuration.retryTimes || DEFAULT_RETRY_TIMES;
+            this.retryInterval = configuration.retryInterval || DEFAULT_RETRY_INTERVAL_SECONDS;
         }
 
         log.info('Connecting to database ' + this.connectUrl);
-        const { name } = this.config.db;
+        const { name } = this.config;
         do {
             try {
                 if (this.client && this.client.isConnected()) {

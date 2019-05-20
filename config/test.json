@@ -4,8 +4,8 @@
         "host": "localhost",
         "port": 27027,
         "name": "sprova",
-        "retryTimes": 0,
-        "retryInterval": 1
+        "retryTimes": -1,
+        "retryInterval": -1
     },
     "mongoOptions": {
         "reconnectTries": 60,

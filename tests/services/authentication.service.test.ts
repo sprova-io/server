@@ -1,4 +1,6 @@
-const config = { db: { host: '127.0.0.1', port: 0, name: '' } };
+import config from '../../src/config';
+
+// const config = { db: { host: '127.0.0.1', port: 0, name: '' } };
 import { adminUser, signUpUser } from '../fixtures/authentication.fixture';
 
 // mocks
@@ -18,7 +20,7 @@ describe('Authentication', () => {
             config.db.port = await mongod.getPort();
             config.db.name = await mongod.getDbName();
 
-            await dbm.connect(config);
+            await dbm.connect(config.db);
             await authenticationService.load();
 
             Users = await dbm.getCollection('users');

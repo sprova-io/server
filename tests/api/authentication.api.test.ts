@@ -1,3 +1,5 @@
+import config from '../../src/config';
+
 import express, { Application } from 'express';
 import request from "supertest";
 
@@ -6,7 +8,6 @@ import { adminUser } from '../fixtures/authentication.fixture';
 // mocks
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import dbm from '../../src/utils/db';
-const config = { db: { host: '127.0.0.1', port: 0, name: '' } };
 
 import authentication from '../../src/api/authentication.api';
 import authenticationService from "../../src/services/authentication.service";
@@ -22,7 +23,7 @@ describe('Authentication API Route', () => {
             config.db.port = await mongod.getPort();
             config.db.name = await mongod.getDbName();
 
-            await dbm.connect(config);
+            await dbm.connect(config.db);
             await authenticationService.load();
 
             Users = await dbm.getCollection('users');

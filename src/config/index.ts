@@ -13,9 +13,10 @@ switch (execMode) {
 
 const configFilePath = path.join(__dirname, `../../config/${execMode}.json`);
 
-if (fs.lstatSync(configFilePath).isFile()) {
-    // tslint:disable-next-line no-var-requires
-    module.exports = require(configFilePath);
-} else {
+if (!fs.lstatSync(configFilePath).isFile()) {
     throw new Error(configFilePath + ' config file missing');
 }
+// tslint:disable-next-line no-var-requires
+const config: any = require(configFilePath);
+
+export default config;

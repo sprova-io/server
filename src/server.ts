@@ -1,3 +1,5 @@
+import * as config from './config';
+
 import cors from 'cors';
 import express, { Application } from 'express';
 import jwt from "express-jwt";

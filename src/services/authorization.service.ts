@@ -8,7 +8,7 @@ import log from '../utils/logger';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'you-hacker!';
 
-class AuthenticationService {
+class AuthorizationService {
     public Users: any;
 
     public async load() {
@@ -61,27 +61,38 @@ class AuthenticationService {
             return { ok: false, message: 'E-mail cannot be empty' };
         }
 
-        const userExists = await this.Users.findOne({ username: user.username });
-        const emailExists = await this.Users.findOne({ usemailername: user.email });
+        try {
+            const userExists = await this.Users.findOne({ username: user.username });
+            const emailExists = await this.Users.findOne({ email: user.email });
 
-        if (userExists) {
-            return { ok: false, message: 'Username already taken' };
-        } else if (emailExists) {
-            return { ok: false, message: 'E-mail already taken' };
-        } else {
-            const newUser: IUser = {
-                username: user.username,
-                password: user.password,
-                email: user.email,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                status: 'SIGNUP',
-                role: 'SIGNUP'
+            if (userExists) {
+                return { ok: false, message: 'Username already taken' };
+            } else if (emailExists) {
+                return { ok: false, message: 'E-mail already taken' };
+            } else {
+                const newUser: IUser = {
+                    username: user.username,
+                    password: user.password,
+                    email: user.email,
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    status: 'SIGNUP',
+                    role: 'SIGNUP'
+                };
+                const newUserInsertResponse = await this.Users.insertOne(newUser);
+                const successfullyAddedUser = newUserInsertResponse.result.ok === 1;
+                return {
+                    ok: successfullyAddedUser,
+                    message: successfullyAddedUser ?
+                        'Successfully signed up. Waiting for Response.' : 'Error signing up'
+                };
+            }
+        } catch (e) {
+            return {
+                ok: false, message: e
             };
-            const newUserInsertResponse = await this.Users.insertOne(newUser);
         }
 
-        return { ok: true, content: user, message: 'Successfully signed up. Waiting for Response.' };
     }
 
     /**
@@ -129,4 +140,4 @@ export interface IValidationResponse extends IResponseMessage {
     content?: IUser;
 }
 
-export default new AuthenticationService();
+export default new AuthorizationService();

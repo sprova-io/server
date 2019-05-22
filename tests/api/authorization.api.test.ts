@@ -9,10 +9,10 @@ import { adminUser } from '../fixtures/authentication.fixture';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import dbm from '../../src/utils/db';
 
-import authentication from '../../src/api/authentication.api';
-import authenticationService from "../../src/services/authentication.service";
+import { authenticationRouter } from '../../src/api/authorization.api';
+import authenticationService from "../../src/services/authorization.service";
 
-describe('Authentication API Route', () => {
+describe('Authorization API Route', () => {
     let app: Application;
     let mongod: MongoMemoryServer;
     let Users: any;
@@ -35,7 +35,7 @@ describe('Authentication API Route', () => {
         app = express();
         app.use(express.json());
         app.use(express.urlencoded({ extended: true }));
-        app.use(authentication);
+        app.use(authenticationRouter);
     });
     describe('authenticate() function', () => {
         afterEach(async () => {

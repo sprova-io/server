@@ -1,14 +1,15 @@
 import { NextFunction, Request, Response, Router } from 'express';
 
-import authenticationService, { IValidationResponse } from '../services/authentication.service';
+import authenticationService, { IValidationResponse } from '../services/authorization.service';
 
 import log from '../utils/logger';
 
 const JWT_SECRET = process.env.JWT_SECRET || 'you-hacker!';
 
-const router = Router();
+export const authenticationRouter = Router();
+export const signUpRouter = Router();
 
-router.post('/', async (req: Request, res: Response, next: NextFunction) => {
+authenticationRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
     if (!req.body) {
         res.status(400).json({
             error: 'No username and password. Empty body.'
@@ -29,5 +30,3 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
         }
     }
 });
-
-export default router;

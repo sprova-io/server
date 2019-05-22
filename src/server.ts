@@ -9,10 +9,10 @@ import path from 'path';
 import { unauthorized } from './utils/http';
 import log, { expressLogger } from './utils/logger';
 
-import authentication from "./api/authentication.api";
+import { authenticationRouter } from "./api/authorization.api";
 import status from "./api/status.api";
 
-import authenticationService from './services/authentication.service';
+import authenticationService from './services/authorization.service';
 
 import dbm from './utils/db';
 
@@ -27,7 +27,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/status", status);
-app.use("/api/authenticate", authentication);
+app.use("/api/authenticate", authenticationRouter);
 
 // Middleware
 app.use(jwt({ secret: process.env.JWT_SECRET || "you-hacker!" }));

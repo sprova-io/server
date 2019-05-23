@@ -1,8 +1,8 @@
 import { ErrorResponse, FormatInsertResult } from '@/utils/responses';
 import { Collection, ObjectId } from 'mongodb';
 import dbm from '../utils/db';
+import { formatDelete, formatInsertOne, formatUpdate } from '../utils/formats';
 import log from '../utils/logger';
-import { formatDelete, formatInsertOne, formatUpdate } from '../utils/utils';
 
 class ProjectService {
     private readonly collectionName = 'projects';
@@ -13,7 +13,7 @@ class ProjectService {
         log.info("Successfully loaded ProjectService");
     }
 
-    public async findProjects(query: any, options: any) {
+    public async find(query: any, options: any) {
         return await this.Projects.find(query, options).toArray();
     }
 
@@ -26,12 +26,12 @@ class ProjectService {
         return formatInsertOne(result);
     }
 
-    public async postProjects(value: any) {
+    public async insertMany(value: any) {
         const result = await this.Projects.insertMany(value);
         return result.ops;
     }
 
-    public async putProject(_id: ObjectId, value: any) {
+    public async updateOne(_id: ObjectId, value: any) {
         // make sure not to change the id when editing
         delete value._id;
         // make sure createdAt was not changed
@@ -41,7 +41,7 @@ class ProjectService {
         return formatUpdate(result, _id);
     }
 
-    public async delProject(_id: ObjectId) {
+    public async deleteOne(_id: ObjectId) {
         const result = await this.Projects.deleteOne({ _id });
         return formatDelete(result, _id);
     }

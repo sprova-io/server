@@ -1,4 +1,3 @@
-import { cloneDeep } from "lodash";
 import config from '../../src/config';
 
 import { project1, project2 } from '../fixtures/project.fixture';
@@ -67,7 +66,7 @@ describe('Project', () => {
         test('To findProjects two', async () => {
             await Projects.insertOne(project1);
             await Projects.insertOne(project2);
-            const result = await projectService.findProjects({}, {});
+            const result = await projectService.find({}, {});
             expect(result).toStrictEqual([project1, project2]);
         });
     });

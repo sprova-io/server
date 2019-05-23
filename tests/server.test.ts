@@ -3,7 +3,7 @@ import config from '../src/config';
 import express, { Application } from 'express';
 import request from "supertest";
 
-import server, { close, loadServices } from '../src/server';
+import server, { close, initialize, loadServices } from '../src/server';
 
 import { adminUser } from './fixtures/authentication.fixture';
 
@@ -24,6 +24,7 @@ describe('server.ts', () => {
 
             await dbm.connect(config.db);
             await loadServices();
+            await initialize();
 
             Users = await dbm.getCollection('users');
             await Users.deleteMany();

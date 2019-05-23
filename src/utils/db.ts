@@ -50,6 +50,8 @@ class DatabaseManager {
             this.retryInterval = configuration.retryInterval || DEFAULT_RETRY_INTERVAL_SECONDS;
         }
 
+        let retry = this.retryTimes;
+
         log.info('Connecting to database ' + this.connectUrl);
         const { name } = this.config;
         do {
@@ -61,10 +63,16 @@ class DatabaseManager {
                 this.db = this.client.db(name);
                 log.info('Successfully connected to database ' + this.connectUrl);
             } catch (error) {
-                log.error(error.message + ', retrying in ' + this.retryInterval + ' seconds');
-                await new Promise(resolve => setTimeout(resolve, this.retryInterval * 1000));
+                log.error(error.message + ', retrying in ' + retry + ' seconds');
+                await new Promise(resolve => setTimeout(resolve, retry * 1000));
             }
-        } while (!this.client && --this.retryTimes > 0);
+        } while (!this.client && --retry > 0);
+
+        // in case still there is no connection then we throw an error
+        if (!this.client) {
+            throw new Error('Could not establish database connection after retrying '
+                + this.retryTimes + ' times');
+        }
     }
 
     /**
@@ -99,4 +107,4 @@ class DatabaseManager {
 
 }
 
-export default new DatabaseManager(config);
+export default new DatabaseManager(config.default.db);

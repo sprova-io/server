@@ -16,6 +16,7 @@ import authenticationService from './services/authorization.service';
 
 import dbm from './utils/db';
 
+const MODE = process.env.NODE_ENV || 'development';
 const PORT = process.env.PORT || 8000;
 
 const app: Application = express();
@@ -42,16 +43,22 @@ export const loadServices = async () => {
   await authenticationService.load();
 };
 
-(async function start() {
+export const initialize = async () => {
   log.info('Server connecting to database');
   try {
     await dbm.connect();
     await loadServices();
     log.info('Successfully established database connection');
   } catch (e) {
-    log.error(e);
+    log.error('Server could not start. Exiting.');
+    log.error(e.message);
+    close();
   }
-})();
+};
+
+if (MODE !== 'test') {
+  initialize();
+}
 
 // Start Server
 const server: Server = app.listen(PORT, () => {

@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
-import { IResponseMessage } from '@/utils/responses';
+import { ResponseMessage } from '@/utils/responses';
 import { IUser } from "../models";
 import dbm from '../utils/db';
 import log from '../utils/logger';
@@ -136,7 +136,7 @@ export const sha512 = (password: string, key = JWT_SECRET) => {
     return hash.digest('hex');
 };
 
-export interface IValidationResponse extends IResponseMessage {
+export interface IValidationResponse extends ResponseMessage {
     content?: IUser;
 }
 

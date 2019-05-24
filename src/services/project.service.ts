@@ -1,7 +1,7 @@
-import { ErrorResponse, FormatInsertResult } from '@/utils/responses';
-import { Collection, ObjectId } from 'mongodb';
+import { ErrorResponse, FormatInsertManyResult, FormatInsertResult } from '@/utils/responses';
+import { Collection, InsertOneWriteOpResult, ObjectId } from 'mongodb';
 import dbm from '../utils/db';
-import { formatDelete, formatInsertOne, formatUpdate } from '../utils/formats';
+import { formatDelete, formatInsertMany, formatInsertOne, formatUpdate } from '../utils/formats';
 import log from '../utils/logger';
 
 class ProjectService {
@@ -22,13 +22,24 @@ class ProjectService {
     }
 
     public async insertOne(value: any): Promise<FormatInsertResult> {
+        if (!value) {
+            throw new Error('Cannot insert undefined or null');
+        }
+
         const result = await this.Projects.insertOne(value);
         return formatInsertOne(result);
     }
 
-    public async insertMany(value: any) {
+    public async insertMany(value: any): Promise<FormatInsertManyResult> {
+        if (!value) {
+            throw new Error('Cannot insert undefined or null');
+        }
+        if (!Array.isArray(value)) {
+            value = [value];
+        }
+
         const result = await this.Projects.insertMany(value);
-        return result.ops;
+        return formatInsertMany(result);
     }
 
     public async updateOne(_id: ObjectId, value: any) {

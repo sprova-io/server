@@ -3,7 +3,7 @@ import {
     InsertOneWriteOpResult, InsertWriteOpResult,
     ObjectId, UpdateWriteOpResult
 } from "mongodb";
-import { FormatDeleteResult, FormatInsertResult, FormatUpdateResult } from "./responses";
+import { FormatDeleteResult, FormatInsertManyResult, FormatInsertResult, FormatUpdateResult } from "./responses";
 
 /**
  * Formats output of mongodb insertOne document result
@@ -15,6 +15,21 @@ export const formatInsertOne = (response: InsertOneWriteOpResult): FormatInsertR
     if (response && response.result) {
         result.ok = response.result.ok === 1;
         result._id = response.insertedId;
+    }
+
+    return result;
+};
+
+/**
+ * Formats output of mongodb formatInsertMany document result
+ *
+ * @param {*} response Respone form mongodb
+ */
+export const formatInsertMany = (response: InsertWriteOpResult): FormatInsertManyResult => {
+    const result: FormatInsertManyResult = { ok: false };
+    if (response && response.result) {
+        result.ok = response.result.ok === 1;
+        result._ids = Object.values(response.insertedIds);
     }
 
     return result;

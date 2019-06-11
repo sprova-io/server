@@ -100,6 +100,35 @@ describe('Project', () => {
         });
     });
 
+    describe('Update', () => {
+        afterEach(async () => {
+            await Projects.deleteMany({});
+        });
+        test('To updateOne() project', async () => {
+            const newTitle = 'updated';
+            await Projects.insertOne(project1);
+            const result = await projectService.updateOneById(project1._id, { title: newTitle });
+            expect(result).not.toBe(undefined);
+            expect(result.ok).toBe(true);
+            const updatedProject1 = await Projects.findOne({ _id: project1._id });
+            expect(updatedProject1.title).toBe(newTitle);
+        });
+    });
+
+    describe('Delete', () => {
+        afterEach(async () => {
+            await Projects.deleteMany({});
+        });
+        test('To deleteOneById() project', async () => {
+            await Projects.insertOne(project1);
+            const result = await projectService.deleteOneById(project1._id);
+            expect(result).not.toBe(undefined);
+            expect(result.ok).toBe(true);
+            const deletedProject1 = await Projects.findOne({ _id: project1._id });
+            expect(deletedProject1).toBe(null);
+        });
+    });
+
     afterAll(async () => {
         mongod.stop();
     });

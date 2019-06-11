@@ -42,7 +42,7 @@ class ProjectService {
         return formatInsertMany(result);
     }
 
-    public async updateOne(_id: ObjectId, value: any) {
+    public async updateOneById(_id: ObjectId, value: any) {
         // make sure not to change the id when editing
         delete value._id;
         // make sure createdAt was not changed
@@ -52,7 +52,7 @@ class ProjectService {
         return formatUpdate(result, _id);
     }
 
-    public async deleteOne(_id: ObjectId) {
+    public async deleteOneById(_id: ObjectId) {
         const result = await this.Projects.deleteOne({ _id });
         return formatDelete(result, _id);
     }

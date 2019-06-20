@@ -17,6 +17,7 @@ import authenticationService from './services/authorization.service';
 import dbm from './utils/db';
 
 const MODE = process.env.NODE_ENV || 'development';
+const TEST_MODE = MODE === 'test';
 const PORT = process.env.PORT || 8000;
 
 const app: Application = express();
@@ -56,7 +57,7 @@ export const initialize = async () => {
   }
 };
 
-if (MODE !== 'test') {
+if (!TEST_MODE) {
   initialize();
 }
 

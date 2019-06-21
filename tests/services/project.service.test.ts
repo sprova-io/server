@@ -86,6 +86,13 @@ describe('Project', () => {
             expect(result).toStrictEqual(project1);
         });
 
+        test('To fail on invalid _id', async () => {
+            await Projects.insertOne(project1);
+            const _id: any = '';
+            const result = await projectService.findOneById(_id);
+            expect(result).toBeNull();
+        });
+
         test('Don\'t findOneById() project that does not exist', async () => {
             await Projects.insertOne(project1);
             const result = await projectService.findOneById(new ObjectId());

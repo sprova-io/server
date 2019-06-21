@@ -1,4 +1,4 @@
-import { ErrorResponse, FormatInsertManyResult, FormatInsertResult } from '@/utils/responses';
+import { FormatInsertManyResult, FormatInsertResult } from '@/utils/responses';
 import { Collection, InsertOneWriteOpResult, ObjectId } from 'mongodb';
 import dbm from '../utils/db';
 import { formatDelete, formatInsertMany, formatInsertOne, formatUpdate } from '../utils/formats';

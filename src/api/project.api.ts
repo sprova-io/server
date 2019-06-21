@@ -3,7 +3,8 @@ import { NextFunction, Request, Response, Router } from 'express';
 import projectService from '../services/project.service';
 import log from '../utils/logger';
 
-import { ObjectId } from 'mongodb';
+import { ApiError } from '../utils/errors';
+import { parseObjectId } from '../utils/http';
 
 const router = Router();
 
@@ -23,8 +24,17 @@ router.get('/', async (req: Request, res: Response) => {
  * Find one project by ID
  */
 router.get('/:id', async (req: Request, res: Response) => {
-    const result = await projectService.findOneById(new ObjectId(req.params.id));
+    try {
+        const _id = parseObjectId(req.params.id);
+        const result = await projectService.findOneById(_id);
+        res.json(result);
+    } catch (e) {
+        if (e instanceof ApiError) {
+            res.status(e.statusCode).json(e.toJson());
+        } else {
+            res.status(500).json({ ok: false, message: e.message });
+        }
+    }
 
-    res.json(result);
 });
 export default router;

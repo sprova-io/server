@@ -52,6 +52,12 @@ describe('Project API Route', () => {
             expect(result.status).toBe(200);
             expect(result.body._id).toBe(project1._id.toHexString());
         });
+        test('don\'t return project that does not exist', async () => {
+            const result: any = await request(app).get("/abc").
+                expect('Content-Type', 'application/json; charset=utf-8');
+            expect(result.body).toBeDefined();
+            expect(result.status).toBe(400);
+        });
     });
     describe('find all projects', () => {
         beforeEach(async () => {
@@ -64,6 +70,7 @@ describe('Project API Route', () => {
             expect(result.status).toBe(200);
             expect(result.body).toBeInstanceOf(Array);
             expect(result.body).toHaveLength(1);
+            expect(result.body[0]._id).toEqual(project1._id.toHexString());
         });
     });
 });

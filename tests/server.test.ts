@@ -1,7 +1,8 @@
 import config from '../src/config';
 
 import express, { Application } from 'express';
-import request from "supertest";
+import { Collection } from 'mongodb';
+import request from 'supertest';
 
 import server, { close, initialize, loadServices } from '../src/server';
 
@@ -10,11 +11,13 @@ import { adminUser } from './fixtures/authentication.fixture';
 // mocks
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import dbm from '../src/utils/db';
+import { project1 } from './fixtures/project.fixture';
 
 describe('server.ts', () => {
     let app: Application;
     let mongod: MongoMemoryServer;
-    let Users: any;
+    let Users: Collection;
+    let Projects: Collection;
     beforeAll(async () => {
         try {
             mongod = new MongoMemoryServer();
@@ -27,7 +30,9 @@ describe('server.ts', () => {
             await initialize();
 
             Users = await dbm.getCollection('users');
-            await Users.deleteMany();
+            Projects = await dbm.getCollection('projects');
+            await Users.deleteMany({});
+            await Projects.deleteMany({});
         } catch (e) {
             throw new Error(e);
         }
@@ -40,13 +45,13 @@ describe('server.ts', () => {
 
     describe('Free routes', () => {
         afterEach(async () => {
-            await Users.deleteMany();
+            await Users.deleteMany({});
         });
 
         test('Should offer status information', async () => {
-            const result: any = await request(app).get("/api/status").
+            const result: any = await request(app).get('/api/status').
                 expect('Content-Type', 'application/json; charset=utf-8');
-            expect(result.body).not.toBe(undefined);
+            expect(result.body).toBeDefined();
             expect(result.body.running).toBe(true);
             expect(result.status).toBe(200);
         });
@@ -54,14 +59,36 @@ describe('server.ts', () => {
         test('Should authenticate ', async () => {
             await Users.insertOne(adminUser);
 
-            const result: any = await request(app).post("/api/authenticate")
+            const result: any = await request(app).post('/api/authenticate')
                 .send({ username: 'admin', password: 'admin' });
             expect(result.type).toBe('application/json');
             expect(result.charset).toBe('utf-8');
-            expect(result.body).not.toBe(undefined);
+            expect(result.body).toBeDefined();
             expect(result.body.message).toBe('Successfully logged in');
-            expect(result.body.token).not.toBe(undefined);
+            expect(result.body.token).toBeDefined();
             expect(result.body.token).not.toBe('');
+            expect(result.status).toBe(200);
+        });
+    });
+
+    describe('Projects', () => {
+        let token: string;
+
+        beforeAll(async () => {
+            await Users.insertOne(adminUser);
+            await Projects.insertOne(project1);
+
+            const result: any = await request(app).post('/api/authenticate')
+                .send({ username: 'admin', password: 'admin' });
+            expect(result.body.token).toBeDefined();
+            token = result.body.token;
+        });
+        test('Should fetch project', async () => {
+            const result: any = await request(app)
+                .get(`/api/projects/${project1._id}`)
+                .set('Authorization', 'bearer ' + token);
+            expect(result.body).toBeDefined();
+            expect(result.body._id).toBe(project1._id.toHexString());
             expect(result.status).toBe(200);
         });
     });

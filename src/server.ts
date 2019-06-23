@@ -2,17 +2,19 @@ import * as config from './config';
 
 import cors from 'cors';
 import express, { Application } from 'express';
-import jwt from "express-jwt";
+import jwt from 'express-jwt';
 import { Server } from 'http';
 import path from 'path';
 
 import { unauthorized } from './utils/http';
 import log, { expressLogger } from './utils/logger';
 
-import { authenticationRouter } from "./api/authorization.api";
-import status from "./api/status.api";
+import { authenticationRouter } from './api/authorization.api';
+import projectRouter from './api/project.api';
+import status from './api/status.api';
 
 import authenticationService from './services/authorization.service';
+import projectService from './services/project.service';
 
 import dbm from './utils/db';
 
@@ -28,20 +30,22 @@ app.use(expressLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/api/status", status);
-app.use("/api/authenticate", authenticationRouter);
+app.use('/api/status', status);
+app.use('/api/authenticate', authenticationRouter);
 
 // Middleware
-app.use(jwt({ secret: process.env.JWT_SECRET || "you-hacker!" }));
+app.use(jwt({ secret: process.env.JWT_SECRET || 'you-hacker!' }));
 app.use(unauthorized());
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Authorized Routes
+app.use('/api/projects', projectRouter);
 
 // Some services due to lack of asynchronity in constructor
 // need to be loaded after DB connection has been setup
 export const loadServices = async () => {
   await authenticationService.load();
+  await projectService.load();
 };
 
 export const initialize = async () => {

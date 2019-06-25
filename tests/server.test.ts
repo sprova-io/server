@@ -91,6 +91,12 @@ describe('server.ts', () => {
             expect(result.body._id).toBe(project1._id.toHexString());
             expect(result.status).toBe(200);
         });
+        test('Should return unauthorized to fetch project', async () => {
+            const result: any = await request(app)
+                .get(`/api/projects/${project1._id}`);
+            expect(result.body).toEqual({ message: 'Authentication failed', ok: false });
+            expect(result.status).toBe(401);
+        });
     });
 
     afterAll(async done => {

@@ -69,7 +69,7 @@ describe('Authorization API Route', () => {
     });
 
     afterAll(async done => {
-        mongod.stop();
+        await mongod.stop();
         done();
     });
 });

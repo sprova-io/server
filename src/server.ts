@@ -70,9 +70,9 @@ const server: Server = app.listen(PORT, () => {
   log.info(`Example app listening on port ${PORT}`);
 });
 
-export const close = async () => {
+export const close = async (): Promise<void> => {
   server.close();
-  await dbm.disconnect();
+  return dbm.disconnect();
 };
 
 export default app;

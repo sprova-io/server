@@ -136,7 +136,8 @@ describe('Project', () => {
         });
     });
 
-    afterAll(async () => {
-        mongod.stop();
+    afterAll(async (done) => {
+        await mongod.stop();
+        done();
     });
 });

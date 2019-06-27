@@ -73,4 +73,9 @@ describe('Project API Route', () => {
             expect(result.body[0]._id).toEqual(project1._id.toHexString());
         });
     });
+    afterAll(async done => {
+        await dbm.disconnect();
+        await mongod.stop();
+        done();
+    });
 });

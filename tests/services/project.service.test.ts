@@ -137,6 +137,7 @@ describe('Project', () => {
     });
 
     afterAll(async (done) => {
+        await dbm.disconnect();
         await mongod.stop();
         done();
     });

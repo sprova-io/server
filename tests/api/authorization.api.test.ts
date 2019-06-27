@@ -69,6 +69,7 @@ describe('Authorization API Route', () => {
     });
 
     afterAll(async done => {
+        await dbm.disconnect();
         await mongod.stop();
         done();
     });

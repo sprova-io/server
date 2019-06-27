@@ -134,6 +134,7 @@ describe('Authentication', () => {
     });
 
     afterAll(async (done) => {
+        await dbm.disconnect();
         await mongod.stop();
         done();
     });

@@ -101,6 +101,7 @@ describe('server.ts', () => {
 
     afterAll(async done => {
         await close();
+        await mongod.stop();
         done();
     });
 });

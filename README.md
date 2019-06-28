@@ -6,7 +6,7 @@
 
 
 ## API documentation
-You can find the full list of public REST API calls https://aldialimucaj.github.io/sprova-server/ 
+You can find the full list of public REST API calls https://sprova-io.github.io/server/
 
 ## Getting Started
 Start the docker container with following parameters:

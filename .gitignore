@@ -2,7 +2,6 @@ build/
 coverage/
 logs/
 node_modules/
-docs/
 
 .env
 *.log

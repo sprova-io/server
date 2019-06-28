@@ -1,0 +1,62 @@
+[
+  {
+    "type": "get",
+    "url": "/api/projects",
+    "title": "",
+    "group": "Projects",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost/api/projects",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "array",
+            "optional": false,
+            "field": "-",
+            "description": "<p>list of projects</p>"
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/api/project.api.ts",
+    "groupTitle": "Projects",
+    "name": "GetApiProjects"
+  },
+  {
+    "type": "get",
+    "url": "/api/projects/:id",
+    "title": "",
+    "group": "Projects",
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "curl -i http://localhost/api/projects/5af582d1dccd6600137334a0",
+        "type": "curl"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "object",
+            "optional": false,
+            "field": "project",
+            "description": ""
+          }
+        ]
+      }
+    },
+    "version": "0.0.0",
+    "filename": "src/api/project.api.ts",
+    "groupTitle": "Projects",
+    "name": "GetApiProjectsId"
+  }
+]

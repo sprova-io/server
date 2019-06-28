@@ -4,14 +4,15 @@
   "description": "Sprova Test Framework Server",
   "main": "src/server.ts",
   "scripts": {
-    "test": "NODE_ENV=test tsc && jest",
+    "test": "NODE_ENV=test tsc && jest --runInBand",
     "publish-coverage": "./node_modules/.bin/codecov --token=\"$CODECOV_TOKEN\"",
     "tsc": "tsc",
     "clean": "./node_modules/.bin/gulp clean",
     "lint-fix": "tslint -c tslint.json -p tsconfig.json --fix",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "dev": "nodemon",
-    "prod": "tsc && ./node_modules/.bin/gulp copy-config && node ./build/src/server.js"
+    "prod": "tsc && ./node_modules/.bin/gulp copy-config && node ./build/src/server.js",
+    "docs": "./node_modules/.bin/apidoc -i src/api -o docs/"
   },
   "author": "Aldi Alimucaj",
   "license": "MIT",
@@ -42,6 +43,7 @@
     "@types/node": "^12.0.10",
     "@types/supertest": "^2.0.7",
     "@types/winston": "^2.4.4",
+    "apidoc": "^0.17.7",
     "codecov": "^3.5.0",
     "del": "^4.1.1",
     "gulp": "^4.0.2",

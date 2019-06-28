@@ -9,7 +9,14 @@ import { parseObjectId } from '../utils/http';
 const router = Router();
 
 /**
- * Find projects by query and filter
+ * @api {get} /api/projects
+ *
+ * @apiGroup Projects
+ *
+ * @apiExample {curl} Example usage:
+ *     curl -i http://localhost/api/projects
+ *
+ * @apiSuccess {array} - list of projects
  */
 router.get('/', async (req: Request, res: Response) => {
     const body = req.body;
@@ -21,7 +28,14 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 /**
- * Find one project by ID
+ * @api {get} /api/projects/:id
+ *
+ * @apiGroup Projects
+ *
+ * @apiExample {curl} Example usage:
+ *     curl -i http://localhost/api/projects/5af582d1dccd6600137334a0
+ *
+ * @apiSuccess {object} project
  */
 router.get('/:id', async (req: Request, res: Response) => {
     try {

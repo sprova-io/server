@@ -19,9 +19,9 @@ const router = Router();
  * @apiSuccess {array} - list of projects
  */
 router.get('/', async (req: Request, res: Response) => {
-    const body = req.body;
-    const query = body ? body.query : undefined;
-    const options = body ? body.options : undefined;
+    const params = req.params;
+    const query = params && params.query ? JSON.parse(params.query) : undefined;
+    const options = params && params.options ? JSON.parse(params.options) : undefined;
     const result = await projectService.find(query, options);
 
     res.json(result);
@@ -49,6 +49,10 @@ router.get('/:id', async (req: Request, res: Response) => {
             res.status(500).json({ ok: false, message: e.message });
         }
     }
+
+});
+
+router.search('/', async (req: Request, res: Response) => {
 
 });
 

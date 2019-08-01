@@ -14,15 +14,15 @@ const router = Router();
  * @apiGroup Projects
  *
  * @apiExample {curl} Example usage:
- *     curl -i http://localhost/api/projects
+ *     curl -i http://localhost/api/projects?limit=10&skip=20
  *
  * @apiSuccess {array} - list of projects
  */
 router.get('/', async (req: Request, res: Response) => {
-    const params = req.params;
-    const query = params && params.query ? JSON.parse(params.query) : undefined;
-    const options = params && params.options ? JSON.parse(params.options) : undefined;
-    const result = await projectService.find(query, options);
+    const query = req.query;
+    const { limit, skip } = query;
+    const options = { limit, skip };
+    const result = await projectService.find({}, options);
 
     res.json(result);
 });
@@ -53,7 +53,7 @@ router.get('/:id', async (req: Request, res: Response) => {
 });
 
 router.search('/', async (req: Request, res: Response) => {
-
+    res.send({ search: true });
 });
 
 export default router;

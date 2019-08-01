@@ -25,7 +25,7 @@ const PORT = process.env.PORT || 8000;
 const app: Application = express();
 
 // Pre authentication middleware
-app.use(cors());
+app.use(cors({ "methods": "GET,HEAD,PUT,PATCH,POST,DELETE,SEARCH" }));
 app.use(expressLogger);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

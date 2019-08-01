@@ -59,6 +59,7 @@ describe('Project API Route', () => {
             expect(result.status).toBe(400);
         });
     });
+
     describe('find all projects', () => {
         beforeEach(async () => {
             await Projects.insertOne(project1);
@@ -73,6 +74,20 @@ describe('Project API Route', () => {
             expect(result.body[0]._id).toEqual(project1._id.toHexString());
         });
     });
+
+    describe('search projects', () => {
+        beforeEach(async () => {
+            await Projects.insertOne(project1);
+        });
+        test('return project', async () => {
+            const result: any = await request(app).search("/").
+                expect('Content-Type', 'application/json; charset=utf-8');
+            expect(result.body).toBeDefined();
+            expect(result.status).toBe(200);
+            expect(result.body).toEqual({ search: true });
+        });
+    });
+
     afterAll(async done => {
         await dbm.disconnect();
         await mongod.stop();

@@ -7,15 +7,17 @@ const DEFAULT_RETRY_TIMES = 5;
 const DEFAULT_RETRY_INTERVAL_SECONDS = 3;
 
 class DatabaseManager {
+    public config: any;
+    public options: any;
     private db: Db | any;
     private client: MongoClient | any;
-    private config: any;
     private retryInterval = DEFAULT_RETRY_INTERVAL_SECONDS;
     private retryTimes = DEFAULT_RETRY_TIMES;
 
-    constructor(configuration: any) {
+    constructor(configuration: any, options: any) {
         log.info('Initializing DB');
         this.config = configuration;
+        this.options = options;
         this.retryTimes = configuration.retryTimes || DEFAULT_RETRY_TIMES;
         this.retryInterval = configuration.retryInterval || DEFAULT_RETRY_INTERVAL_SECONDS;
     }
@@ -27,7 +29,6 @@ class DatabaseManager {
     }
 
     get mongoOptions(): MongoClientOptions {
-        const { mongoOptions } = this.config;
         const { SPROVA_DB_USERNAME, SPROVA_DB_PASSWORD } = process.env;
 
         const overrides = {
@@ -35,7 +36,7 @@ class DatabaseManager {
             ...SPROVA_DB_PASSWORD && { password: SPROVA_DB_PASSWORD }
         };
 
-        return { ...mongoOptions, useNewUrlParser: true, ...overrides };
+        return { ...this.options, useNewUrlParser: true, ...overrides };
     }
 
     /**
@@ -107,4 +108,4 @@ class DatabaseManager {
 
 }
 
-export default new DatabaseManager(config.default.db);
+export default new DatabaseManager(config.default.db, config.default.mongoOptions);

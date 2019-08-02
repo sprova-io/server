@@ -19,8 +19,8 @@ const router = Router();
  * @apiSuccess {array} - list of projects
  */
 router.get('/', async (req: Request, res: Response) => {
-    const query = req.query;
-    const { limit, skip } = query;
+    const limit = req.query ? Number(req.query.limit) || 0 : 0;
+    const skip = req.query ? Number(req.query.skip) || 0 : 0;
     const options = { limit, skip };
     const result = await projectService.find({}, options);
 
@@ -52,8 +52,27 @@ router.get('/:id', async (req: Request, res: Response) => {
 
 });
 
+/**
+ * @api {search} /api/projects
+ *
+ * @apiGroup Projects
+ *
+ * @apiExample {curl} Example usage:
+ *     curl -i -X SEARCH http://localhost/api/projects
+ *
+ * @apiSuccess {object} project
+ */
 router.search('/', async (req: Request, res: Response) => {
-    res.send({ search: true });
+    let query = {};
+    let options = {};
+    if (req.body) {
+        query = req.body.query;
+        options = req.body.options;
+    }
+
+    const result = await projectService.find(query, options);
+
+    res.send(result);
 });
 
 export default router;

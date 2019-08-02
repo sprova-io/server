@@ -78,13 +78,18 @@ describe('Project API Route', () => {
     describe('search projects', () => {
         beforeEach(async () => {
             await Projects.insertOne(project1);
+            // await Projects.insertOne(project2);
         });
-        test('return project', async () => {
-            const result: any = await request(app).search("/").
-                expect('Content-Type', 'application/json; charset=utf-8');
+        test('find project', async () => {
+            const result: any = await request(app).search("/")
+                .type('json')
+                .send({ query: { title: 'Best App' }, options: { limit: 1 } });
+            expect(result.type).toBe('application/json');
             expect(result.body).toBeDefined();
             expect(result.status).toBe(200);
-            expect(result.body).toEqual({ search: true });
+            expect(result.body).toBeInstanceOf(Array);
+            expect(result.body).toHaveLength(1);
+            expect(result.body[0]._id).toEqual(project1._id.toHexString());
         });
     });
 

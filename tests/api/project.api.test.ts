@@ -36,6 +36,8 @@ describe('Project API Route', () => {
         }
 
         app = express();
+        app.use(express.json());
+        app.use(express.urlencoded({ extended: true }));
         app.use(projectApi);
     });
     afterEach(async () => {
@@ -78,11 +80,10 @@ describe('Project API Route', () => {
     describe('search projects', () => {
         beforeEach(async () => {
             await Projects.insertOne(project1);
-            // await Projects.insertOne(project2);
+            await Projects.insertOne(project2);
         });
         test('find project', async () => {
-            const result: any = await request(app).search("/")
-                .type('json')
+            const result: any = await request(app).search("/").type('json')
                 .send({ query: { title: 'Best App' }, options: { limit: 1 } });
             expect(result.type).toBe('application/json');
             expect(result.body).toBeDefined();
@@ -90,6 +91,36 @@ describe('Project API Route', () => {
             expect(result.body).toBeInstanceOf(Array);
             expect(result.body).toHaveLength(1);
             expect(result.body[0]._id).toEqual(project1._id.toHexString());
+        });
+    });
+
+    describe('post projects', () => {
+        test('add new project', async () => {
+            const result: any = await request(app).post("/").type('json')
+                .send(project1);
+            expect(result.type).toBe('application/json');
+            expect(result.body).toBeDefined();
+            expect(result.status).toBe(201);
+            expect(result.body.ok).toBeTruthy();
+            expect(result.body._id).toEqual(project1._id.toHexString());
+        });
+
+        test('add twice a project', async () => {
+            const result: any = await request(app).post("/").type('json')
+                .send(project1);
+            expect(result.type).toBe('application/json');
+            expect(result.body).toBeDefined();
+            expect(result.status).toBe(201);
+            expect(result.body.ok).toBeTruthy();
+            expect(result.body._id).toEqual(project1._id.toHexString());
+
+            const result2: any = await request(app).post("/").type('json')
+                .send(project1);
+            expect(result2.type).toBe('application/json');
+            expect(result2.body).toBeDefined();
+            expect(result2.status).toBe(500);
+            expect(result2.body.ok).toBeFalsy();
+            expect(result2.body.error).toMatch(/E11000 duplicate key error/);
         });
     });
 

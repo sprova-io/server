@@ -7,6 +7,7 @@ export interface ResponseMessage {
 
 export interface FormatResponse {
     ok: boolean;
+    error?: any;
 }
 
 export interface ErrorResponse {

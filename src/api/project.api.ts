@@ -4,9 +4,10 @@ import projectService from '../services/project.service';
 import log from '../utils/logger';
 
 import { ApiError } from '../utils/errors';
+import { formatIDs, formatInsertOne } from '../utils/formats';
 import { parseObjectId } from '../utils/http';
-
 const router = Router();
+export default router;
 
 /**
  * @api {get} /api/projects
@@ -75,4 +76,27 @@ router.search('/', async (req: Request, res: Response) => {
     res.send(result);
 });
 
-export default router;
+/**
+ * @api {post} /api/projects Post new project
+ *
+ * @apiExample {curl} Example usage:
+ *     curl -X POST -d '{"key1":"value1", "key2":"value2"}'
+ *          -H "Content-Type: application/json" http://localhost/api/projects
+ *
+ * @apiName postProject
+ * @apiGroup Projects
+ *
+ * @apiSuccess {Number} ok 1 if successful; 0 if unsuccessful
+ * @apiSuccess {String} _id ID of newly added element
+ */
+router.post('/', async (req: Request, res: Response) => {
+    const value = req.body;
+    value.createdAt = new Date();
+
+    try {
+        const result = await projectService.insertOne(formatIDs(value));
+        res.status(201).json(result);
+    } catch (e) {
+        res.status(500).json({ ok: false, error: e.errmsg });
+    }
+});

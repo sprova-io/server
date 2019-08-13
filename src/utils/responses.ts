@@ -7,11 +7,7 @@ export interface ResponseMessage {
 
 export interface FormatResponse {
     ok: boolean;
-    errmsg?: any;
-}
-
-export interface ErrorResponse extends FormatResponse {
-    errmsg: any;
+    message?: any;
 }
 
 export interface FormatInsertResult extends FormatResponse {

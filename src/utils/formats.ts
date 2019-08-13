@@ -5,8 +5,9 @@ import {
     ObjectId, UpdateWriteOpResult
 } from "mongodb";
 import {
-    ErrorResponse, FormatDeleteResult,
+    FormatDeleteResult,
     FormatInsertManyResult, FormatInsertResult,
+    FormatResponse,
     FormatUpdateResult
 } from "./responses";
 
@@ -108,8 +109,8 @@ export const formatIDs = (value: any) => {
  *
  * @param message ErrorResponse
  */
-export const errorWithMessage = (message: string): ErrorResponse => {
-    return { ok: false, errmsg: message };
+export const errorWithMessage = (message: string): FormatResponse => {
+    return { ok: false, message };
 };
 
 /**

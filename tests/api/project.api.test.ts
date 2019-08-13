@@ -120,7 +120,7 @@ describe('Project API Route', () => {
             expect(result2.body).toBeDefined();
             expect(result2.status).toBe(500);
             expect(result2.body.ok).toBeFalsy();
-            expect(result2.body.errmsg).toMatch(/E11000 duplicate key error/);
+            expect(result2.body.message).toMatch(/E11000 duplicate key error/);
         });
     });
 
@@ -150,7 +150,7 @@ describe('Project API Route', () => {
             expect(result.body).toBeDefined();
             expect(result.status).toBe(400);
             expect(result.body.ok).toBeFalsy();
-            expect(result.body.errmsg).toEqual('cannot PUT with empty body. use DEL instead.');
+            expect(result.body.message).toEqual('cannot PUT with empty body. use DEL instead.');
         });
     });
 
@@ -159,7 +159,6 @@ describe('Project API Route', () => {
             await Projects.insertOne(project1);
         });
         test('edit new project', async () => {
-            const newTitle = 'great-change';
             const result: any = await request(app)
                 .del("/" + project1._id);
             expect(result.type).toBe('application/json');

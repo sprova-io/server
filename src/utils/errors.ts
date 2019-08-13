@@ -12,6 +12,6 @@ export class ApiError extends Error {
     }
 
     public toJson() {
-        return { ok: false, message: this.message, type: this.name };
+        return { ok: false, errmsg: this.message, type: this.name };
     }
 }

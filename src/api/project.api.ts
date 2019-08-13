@@ -129,7 +129,31 @@ router.put('/:id', async (req: Request, res: Response) => {
             const result = await projectService.updateOneById(_id, formatIDs(value));
             res.status(200).json(result);
         } catch (e) {
-            res.status(500).json({ ok: false, error: e.errmsg });
+            res.status(500).json(errorWithMessage(e.errmsg));
         }
+    }
+});
+
+/**
+ * @api {del} /api/projects/:id Delete project
+ *
+ * @apiExample {curl} Example usage:
+ *     curl -X DEL http://localhost/api/projects/5af582d1dccd6600137334a0
+ *
+ * @apiName delProject
+ * @apiGroup Projects
+ *
+ * @apiParam {Number} id project's unique ID.
+ *
+ * @apiSuccess {Boolean} ok true if successful; false if  unsuccessful
+ */
+
+router.delete('/:id', async (req: Request, res: Response) => {
+    try {
+        const _id = parseObjectId(req.params.id);
+        const result = await projectService.deleteOneById(_id);
+        res.status(200).json(result);
+    } catch (e) {
+        res.status(500).json(errorWithMessage(e.errmsg));
     }
 });

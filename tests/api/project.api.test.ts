@@ -154,6 +154,24 @@ describe('Project API Route', () => {
         });
     });
 
+    describe('delete projects', () => {
+        beforeEach(async () => {
+            await Projects.insertOne(project1);
+        });
+        test('edit new project', async () => {
+            const newTitle = 'great-change';
+            const result: any = await request(app)
+                .del("/" + project1._id);
+            expect(result.type).toBe('application/json');
+            expect(result.body).toBeDefined();
+            expect(result.status).toBe(200);
+            expect(result.body.ok).toBeTruthy();
+            expect(result.body._id).toEqual(project1._id.toHexString());
+            const newProjectResult: any = await request(app).get("/" + project1._id);
+            expect(newProjectResult.body).toBeNull();
+        });
+    });
+
     afterAll(async done => {
         await dbm.disconnect();
         await mongod.stop();

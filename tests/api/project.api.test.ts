@@ -120,7 +120,37 @@ describe('Project API Route', () => {
             expect(result2.body).toBeDefined();
             expect(result2.status).toBe(500);
             expect(result2.body.ok).toBeFalsy();
-            expect(result2.body.error).toMatch(/E11000 duplicate key error/);
+            expect(result2.body.errmsg).toMatch(/E11000 duplicate key error/);
+        });
+    });
+
+    describe('put projects', () => {
+        beforeEach(async () => {
+            await Projects.insertOne(project1);
+        });
+        test('edit new project', async () => {
+            const newTitle = 'great-change';
+            const result: any = await request(app)
+                .put("/" + project1._id)
+                .type('json').send({ title: newTitle });
+            expect(result.type).toBe('application/json');
+            expect(result.body).toBeDefined();
+            expect(result.status).toBe(200);
+            expect(result.body.ok).toBeTruthy();
+            expect(result.body._id).toEqual(project1._id.toHexString());
+            const newProjectResult: any = await request(app).get("/" + project1._id);
+            expect(newProjectResult.body.title).toEqual(newTitle);
+        });
+
+        test('put empty body', async () => {
+            const result: any = await request(app)
+                .put("/" + project1._id)
+                .type('json').send();
+            expect(result.type).toBe('application/json');
+            expect(result.body).toBeDefined();
+            expect(result.status).toBe(400);
+            expect(result.body.ok).toBeFalsy();
+            expect(result.body.errmsg).toEqual('cannot PUT with empty body. use DEL instead.');
         });
     });
 

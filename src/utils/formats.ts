@@ -4,7 +4,11 @@ import {
     InsertOneWriteOpResult, InsertWriteOpResult,
     ObjectId, UpdateWriteOpResult
 } from "mongodb";
-import { FormatDeleteResult, FormatInsertManyResult, FormatInsertResult, FormatUpdateResult } from "./responses";
+import {
+    ErrorResponse, FormatDeleteResult,
+    FormatInsertManyResult, FormatInsertResult,
+    FormatUpdateResult
+} from "./responses";
 
 /**
  * Formats output of mongodb insertOne document result
@@ -97,6 +101,15 @@ export const formatIDs = (value: any) => {
     }
 
     return result;
+};
+
+/**
+ * Return formatted error response with message
+ *
+ * @param message ErrorResponse
+ */
+export const errorWithMessage = (message: string): ErrorResponse => {
+    return { ok: false, errmsg: message };
 };
 
 /**

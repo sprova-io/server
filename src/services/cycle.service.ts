@@ -6,12 +6,12 @@ import log from '../utils/logger';
 import GenericService from './generic.service';
 
 /**
- * Project Service takes care of database operations regarding projects and its relationships.I
+ * Cycle Service takes care of database operations regarding cycles and its relationships.I
  */
-class ProjectService extends GenericService {
+class CycleService extends GenericService {
     constructor() {
-        super('projects');
+        super('cycles');
     }
 }
 
-export default new ProjectService();
+export default new CycleService();

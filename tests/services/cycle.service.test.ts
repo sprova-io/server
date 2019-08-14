@@ -1,6 +1,6 @@
 import config from '../../src/config';
 
-import { project1, project2 } from '../fixtures/project.fixture';
+import { cycle1, cycle2 } from '../fixtures/cycle.fixture';
 
 // mocks
 import { MongoMemoryServer } from 'mongodb-memory-server';
@@ -8,11 +8,11 @@ import dbm from '../../src/utils/db';
 
 import { FormatInsertManyResult, FormatInsertResult } from "@/utils/responses";
 import { Collection, ObjectId } from "mongodb";
-import projectService from "../../src/services/project.service";
+import cycleService from "../../src/services/cycle.service";
 
-describe('Project', () => {
+describe('Cycle', () => {
     let mongod: MongoMemoryServer;
-    let Projects: Collection;
+    let Cycles: Collection;
     beforeAll(async () => {
         try {
             mongod = new MongoMemoryServer();
@@ -21,23 +21,23 @@ describe('Project', () => {
             config.db.name = await mongod.getDbName();
 
             await dbm.connect(config.db);
-            await projectService.load();
+            await cycleService.load();
 
-            Projects = await dbm.getCollection('projects');
-            await Projects.deleteMany({});
+            Cycles = await dbm.getCollection('cycles');
+            await Cycles.deleteMany({});
         } catch (e) {
             throw new Error(e);
         }
     });
     describe('Insert One', () => {
         afterEach(async () => {
-            await Projects.deleteMany({});
+            await Cycles.deleteMany({});
         });
-        test('Insert a new project', async () => {
-            const result = await projectService.insertOne(project1);
+        test('Insert a new cycle', async () => {
+            const result = await cycleService.insertOne(cycle1);
             expect(result).not.toBe(undefined);
             expect(result.ok).toBe(true);
-            expect((result as FormatInsertResult)._id).toBe(project1._id);
+            expect((result as FormatInsertResult)._id).toBe(cycle1._id);
         });
     });
 

@@ -49,7 +49,8 @@
             ],
             "env": {
                 "NODE_ENV": "development",
-                "S_NODE_PROJECT": "tsconfig.json"
+                "S_NODE_PROJECT": "tsconfig.json",
+                "PORT": "8181"
             },
             "console": "integratedTerminal",
         },
@@ -60,7 +61,8 @@
             "program": "${workspaceFolder}/src/server.ts",
             "preLaunchTask": "tsc: build - tsconfig.json",
             "env": {
-                "NODE_ENV": "development"
+                "NODE_ENV": "development",
+                "PORT": "8181"
             },
             "console": "integratedTerminal",
             "outFiles": [

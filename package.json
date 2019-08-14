@@ -11,7 +11,7 @@
     "lint-fix": "tslint -c tslint.json -p tsconfig.json --fix",
     "lint": "tslint -c tslint.json -p tsconfig.json",
     "dev": "nodemon",
-    "prod": "tsc && ./node_modules/.bin/gulp copy-config && node ./build/src/server.js",
+    "prod": "tsc && ./node_modules/.bin/gulp copy-config && PORT=8181 node ./build/src/server.js",
     "docs": "./node_modules/.bin/apidoc -i src/api -o docs/"
   },
   "author": "Aldi Alimucaj",

@@ -3,8 +3,8 @@ import { ObjectId } from "mongodb";
 
 export const cycle1 = {
     _id: new ObjectId("5af585eedccd6600137334a8"),
-    title: "Release 6.3",
-    description: "Release 6.3",
+    title: "Release 1.0",
+    description: "Release 1.0",
     projectId: new ObjectId("5af582d1dccd6600137334a0"),
     testCases: [
         new ObjectId("5b0bcde84c2ed900134a4c67")
@@ -12,9 +12,9 @@ export const cycle1 = {
     status: "Abandoned",
     extraFields: [
         {
-            title: "Stream Processor",
+            title: "Processor",
             type: "String",
-            key: "streamProcessor"
+            key: "processor"
         },
         {
             title: "Coordinator",

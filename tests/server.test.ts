@@ -11,6 +11,7 @@ import { adminUser } from './fixtures/authentication.fixture';
 // mocks
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import dbm from '../src/utils/db';
+import { cycle1 } from './fixtures/cycle.fixture';
 import { project1 } from './fixtures/project.fixture';
 
 describe('server.ts', () => {
@@ -18,6 +19,7 @@ describe('server.ts', () => {
     let mongod: MongoMemoryServer;
     let Users: Collection;
     let Projects: Collection;
+    let Cycles: Collection;
     beforeAll(async () => {
         try {
             mongod = new MongoMemoryServer();
@@ -31,8 +33,10 @@ describe('server.ts', () => {
 
             Users = await dbm.getCollection('users');
             Projects = await dbm.getCollection('projects');
+            Cycles = await dbm.getCollection('cycles');
             await Users.deleteMany({});
             await Projects.deleteMany({});
+            await Cycles.deleteMany({});
         } catch (e) {
             throw new Error(e);
         }
@@ -97,6 +101,38 @@ describe('server.ts', () => {
             expect(result.body).toEqual({ message: 'Authentication failed', ok: false });
             expect(result.status).toBe(401);
         });
+    });
+
+    describe('Cycles', () => {
+        let token: string;
+
+        beforeAll(async () => {
+            await Users.deleteMany({});
+            await Cycles.deleteMany({});
+
+            await Users.insertOne(adminUser);
+            await Cycles.insertOne(cycle1);
+
+            const result: any = await request(app).post('/api/authenticate')
+                .send({ username: 'admin', password: 'admin' });
+            expect(result.body.token).toBeDefined();
+            token = result.body.token;
+        });
+        test('Should fetch cycle', async () => {
+            const result: any = await request(app)
+                .get(`/api/cycles/${cycle1._id}`)
+                .set('Authorization', 'bearer ' + token);
+            expect(result.body).toBeDefined();
+            expect(result.body._id).toBe(cycle1._id.toHexString());
+            expect(result.status).toBe(200);
+        });
+        test('Should return unauthorized to fetch cycle', async () => {
+            const result: any = await request(app)
+                .get(`/api/cycles/${cycle1._id}`);
+            expect(result.body).toEqual({ message: 'Authentication failed', ok: false });
+            expect(result.status).toBe(401);
+        });
+
     });
 
     afterAll(async done => {

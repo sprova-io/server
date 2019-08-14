@@ -10,10 +10,12 @@ import { unauthorized } from './utils/http';
 import log, { expressLogger } from './utils/logger';
 
 import { authenticationRouter } from './api/authorization.api';
+import cycleRouter from './api/cycle.api';
 import projectRouter from './api/project.api';
 import status from './api/status.api';
 
 import authenticationService from './services/authorization.service';
+import cycleService from './services/cycle.service';
 import projectService from './services/project.service';
 
 import dbm from './utils/db';
@@ -40,12 +42,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Authorized Routes
 app.use('/api/projects', projectRouter);
+app.use('/api/cycles', cycleRouter);
 
 // Some services due to lack of asynchronity in constructor
 // need to be loaded after DB connection has been setup
 export const loadServices = async () => {
   await authenticationService.load();
   await projectService.load();
+  await cycleService.load();
 };
 
 export const initialize = async () => {
@@ -67,7 +71,7 @@ if (!TEST_MODE) {
 
 // Start Server
 const server: Server = app.listen(PORT, () => {
-  log.info(`Example app listening on port ${PORT}`);
+  log.info(`Server listening on port ${PORT}`);
 });
 
 export const close = async (): Promise<void> => {

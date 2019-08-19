@@ -64,7 +64,7 @@ class DatabaseManager {
                 this.db = this.client.db(name);
                 log.info('Successfully connected to database ' + this.connectUrl);
             } catch (error) {
-                log.error(error.message + ', retrying in ' + retry + ' seconds');
+                log.warn(error.message + ', retrying in ' + retry + ' seconds');
                 await new Promise(resolve => setTimeout(resolve, retry * 1000));
             }
         } while (!this.client && --retry > 0);
@@ -83,7 +83,7 @@ class DatabaseManager {
         if (this.client && this.client.isConnected()) {
             await this.client.close();
         } else {
-            log.warn('Attempting to close a DB connection which does not exist.');
+            throw new Error('Attempting to close a DB connection which does not exist.');
         }
     }
 
@@ -94,18 +94,10 @@ class DatabaseManager {
      */
     public async getCollection(name: string) {
         if (!this.db) {
-            throw new Error('Trying to open collection without database connection!');
+            throw new Error(`Trying to open collection ${name} without database connection!`);
         }
         return await this.db.collection(name);
     }
-
-    /**
-     * Get current database object.
-     */
-    public getDB() {
-        return this.db;
-    }
-
 }
 
 export default new DatabaseManager(config.default.db, config.default.mongoOptions);

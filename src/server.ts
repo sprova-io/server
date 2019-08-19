@@ -76,7 +76,7 @@ const server: Server = app.listen(PORT, () => {
 
 export const close = async (): Promise<void> => {
   server.close();
-  return dbm.disconnect();
+  dbm.disconnect();
 };
 
 export default app;

@@ -22,7 +22,7 @@ authenticationRouter.post('/', async (req: Request, res: Response, next: NextFun
         if (validationResponse.ok && validationResponse.content) {
             const user = validationResponse.content;
             const body = authenticationService.buildJwtToken(user, JWT_SECRET);
-            res.json(body);
+            res.json({ ...body, user });
         } else {
             res.status(401).json({
                 error: validationResponse.message
